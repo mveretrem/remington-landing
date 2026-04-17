@@ -29,6 +29,7 @@ Visit [http://localhost:3000](http://localhost:3000) to view the application.
 - **Icons:** Lucide React (v0.577.0)
 - **Utilities:** clsx, tailwind-merge, class-variance-authority
 
+
 ## 🏗️ Project Structure
 
 ```
