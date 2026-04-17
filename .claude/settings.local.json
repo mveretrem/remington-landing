@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(echo \"started pid=$!\")",
+      "Read(//tmp/**)",
+      "Bash(kill 44902)",
+      "Bash(curl -s -o /tmp/out.html -w \"HTTP=%{http_code}\\\\n\" http://localhost:3000)",
+      "Bash(curl -sL -o /tmp/out.html -w \"HTTP=%{http_code}\\\\n\" http://localhost:3000)",
+      "Read(//private/tmp/**)",
+      "Bash(grep -oE '\"[^\"]{0,80}\"' /tmp/out.html)",
+      "Bash(lsof -ti:3001 -ti:3002 -ti:3003)",
+      "Bash(PORT=3005 npm run dev)",
+      "Bash(echo \"pid=$!\")",
+      "Bash(fuser /Users/danielveretenov/Downloads/Coding/remington-construction/.next/dev/lock)",
+      "Bash(kill 46703)",
+      "Bash(lsof -iTCP -sTCP:LISTEN -p 15533)",
+      "Bash(lsof *)",
+      "Bash(curl -sL -o /tmp/out.html -w \"HTTP=%{http_code}\\\\n\" http://localhost:3001/)",
+      "Bash(kill -9 15490 15533)"
+    ]
+  }
+}
