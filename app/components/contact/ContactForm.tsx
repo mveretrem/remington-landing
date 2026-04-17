@@ -10,11 +10,33 @@ export function ContactForm() {
     phone: "",
     message: "",
   });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted:", formData);
+    setStatus("loading");
+
+    const payload = {
+      access_key: "d97d4957-5bc4-4818-ab21-d86da58fcf0e",
+      ...formData,
+    };
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStatus("success");
+        setFormData({ name: "", company: "", email: "", phone: "", message: "" });
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
   };
 
   const handleChange = (
@@ -114,12 +136,19 @@ export function ContactForm() {
       </div>
 
       {/* Submit Button */}
-      <div className="flex justify-end">
+      <div className="flex flex-col items-end gap-3">
+        {status === "success" && (
+          <p className="text-sm font-medium text-green-600">Message sent! We&apos;ll be in touch soon.</p>
+        )}
+        {status === "error" && (
+          <p className="text-sm font-medium text-red-600">Something went wrong. Please try again.</p>
+        )}
         <button
           type="submit"
-          className="rounded-lg bg-remington-orange px-8 py-3 font-semibold text-white transition-opacity hover:opacity-90"
+          disabled={status === "loading"}
+          className="rounded-lg bg-remington-orange px-8 py-3 font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
         >
-          Send Message
+          {status === "loading" ? "Sending..." : "Send Message"}
         </button>
       </div>
     </form>
