@@ -49,11 +49,11 @@ export function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-10 border border-white/10 bg-ink-2/60 p-6 backdrop-blur sm:p-10">
       {/* Name and Company Row */}
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-10 md:grid-cols-2">
         <div>
-          <label htmlFor="name" className="mb-2 block text-sm font-medium text-gray-700">
+          <label htmlFor="name" className="label-mono block text-white/50">
             Name
           </label>
           <input
@@ -64,12 +64,12 @@ export function ContactForm() {
             onChange={handleChange}
             placeholder="Full Name"
             required
-            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-remington-orange focus:outline-none focus:ring-2 focus:ring-remington-orange/20"
+            className="w-full border-0 border-b border-white/20 bg-transparent px-0 py-3 text-lg text-white placeholder-white/30 transition-colors focus:border-remington-orange focus:outline-none focus:ring-0"
           />
         </div>
 
         <div>
-          <label htmlFor="company" className="mb-2 block text-sm font-medium text-gray-700">
+          <label htmlFor="company" className="label-mono block text-white/50">
             Company
           </label>
           <input
@@ -79,15 +79,15 @@ export function ContactForm() {
             value={formData.company}
             onChange={handleChange}
             placeholder="Company Name"
-            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-remington-orange focus:outline-none focus:ring-2 focus:ring-remington-orange/20"
+            className="w-full border-0 border-b border-white/20 bg-transparent px-0 py-3 text-lg text-white placeholder-white/30 transition-colors focus:border-remington-orange focus:outline-none focus:ring-0"
           />
         </div>
       </div>
 
       {/* Email and Phone Row */}
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-10 md:grid-cols-2">
         <div>
-          <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-700">
+          <label htmlFor="email" className="label-mono block text-white/50">
             E-Mail
           </label>
           <input
@@ -98,12 +98,12 @@ export function ContactForm() {
             onChange={handleChange}
             placeholder="E-Mail Address"
             required
-            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-remington-orange focus:outline-none focus:ring-2 focus:ring-remington-orange/20"
+            className="w-full border-0 border-b border-white/20 bg-transparent px-0 py-3 text-lg text-white placeholder-white/30 transition-colors focus:border-remington-orange focus:outline-none focus:ring-0"
           />
         </div>
 
         <div>
-          <label htmlFor="phone" className="mb-2 block text-sm font-medium text-gray-700">
+          <label htmlFor="phone" className="label-mono block text-white/50">
             Phone
           </label>
           <input
@@ -113,14 +113,14 @@ export function ContactForm() {
             value={formData.phone}
             onChange={handleChange}
             placeholder="Phone Number"
-            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-remington-orange focus:outline-none focus:ring-2 focus:ring-remington-orange/20"
+            className="w-full border-0 border-b border-white/20 bg-transparent px-0 py-3 text-lg text-white placeholder-white/30 transition-colors focus:border-remington-orange focus:outline-none focus:ring-0"
           />
         </div>
       </div>
 
       {/* Message */}
       <div>
-        <label htmlFor="message" className="mb-2 block text-sm font-medium text-gray-700">
+        <label htmlFor="message" className="label-mono block text-white/50">
           Message
         </label>
         <textarea
@@ -128,27 +128,27 @@ export function ContactForm() {
           name="message"
           value={formData.message}
           onChange={handleChange}
-          placeholder="Write Message Here"
-          rows={6}
+          placeholder="Building type, unit count, scope, schedule…"
+          rows={4}
           required
-          className="w-full resize-none rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-remington-orange focus:outline-none focus:ring-2 focus:ring-remington-orange/20"
+          className="w-full resize-none border-0 border-b border-white/20 bg-transparent px-0 py-3 text-lg text-white placeholder-white/30 transition-colors focus:border-remington-orange focus:outline-none focus:ring-0"
         />
       </div>
 
       {/* Submit Button */}
-      <div className="flex flex-col items-end gap-3">
+      <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
         {status === "success" && (
-          <p className="text-sm font-medium text-green-600">Message sent! We&apos;ll be in touch soon.</p>
+          <p className="text-sm font-medium text-emerald-400" role="status">Message sent. We&apos;ll be in touch soon.</p>
         )}
         {status === "error" && (
-          <p className="text-sm font-medium text-red-600">Something went wrong. Please try again.</p>
+          <p className="text-sm font-medium text-red-400" role="alert">Something went wrong. Please try again.</p>
         )}
         <button
           type="submit"
           disabled={status === "loading"}
-          className="rounded-lg bg-remington-orange px-8 py-3 font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="ml-auto bg-remington-orange px-8 py-4 font-semibold text-white transition-all hover:bg-[#cf4209] active:translate-y-px disabled:opacity-60"
         >
-          {status === "loading" ? "Sending..." : "Send Message"}
+          {status === "loading" ? "Sending…" : "Send Message"}
         </button>
       </div>
     </form>

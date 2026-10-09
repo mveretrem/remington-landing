@@ -13,9 +13,10 @@ export function Navigation({ className }: NavigationProps) {
         <Link
           key={item.href}
           href={item.href}
-          className="text-sm font-medium text-white transition-opacity hover:opacity-80"
+          className="group relative text-sm font-medium text-white/80 transition-colors hover:text-white"
         >
           {item.label}
+          <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-remington-orange transition-transform duration-300 group-hover:scale-x-100" />
         </Link>
       ))}
     </nav>

@@ -3,13 +3,23 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { ArrowUpRight, Phone, X } from "lucide-react";
 import { Navigation } from "./Navigation";
 import { Container } from "../ui/container";
-import { BRAND, NAV_ITEMS } from "@/lib/constants";
+import { BRAND, NAV_ITEMS, PHONE } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Solid background once the hero is scrolled past the top
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -44,43 +54,60 @@ export function Header() {
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return (
-    <header className="absolute left-0 right-0 top-0 z-50 py-6">
-      <Container>
+    <header
+      className={cn(
+        "fixed left-0 right-0 top-0 z-50 transition-all duration-300",
+        isScrolled
+          ? "border-b border-white/10 bg-ink/85 py-3 backdrop-blur-md"
+          : "border-b border-transparent py-6"
+      )}
+    >
+      <Container className="max-w-[90rem]">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-80">
+          <Link href="/" className="relative z-50 flex items-center transition-opacity hover:opacity-80">
             <Image
               src={BRAND.logo.src}
               alt={BRAND.logo.alt}
-              width={200}
-              height={0}
+              width={744}
+              height={240}
               priority
-              objectFit="contain"
+              className={cn("w-auto transition-all duration-300", isScrolled ? "h-9" : "h-11")}
             />
           </Link>
 
           {/* Desktop Navigation & CTA */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden items-center gap-10 lg:flex">
             <Navigation />
-            <Link
-              href="#contact"
-              className="rounded-lg bg-remington-orange px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-            >
-              Contact Us
-            </Link>
+            <div className="flex items-center gap-5">
+              <a
+                href={PHONE.href}
+                className="tabular flex items-center gap-2 text-sm font-medium text-white/80 transition-colors hover:text-white"
+              >
+                <Phone className="h-4 w-4 text-remington-orange" strokeWidth={2} />
+                {PHONE.display}
+              </a>
+              <Link
+                href="#contact"
+                className="group flex items-center gap-1.5 bg-remington-orange px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[#cf4209] active:translate-y-px"
+              >
+                Request a bid
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </Link>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-white z-50 relative"
+            className="relative z-50 text-white lg:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMobileMenuOpen}
           >
-            <div className="w-6 h-6 flex flex-col justify-center items-center">
+            <div className="flex h-6 w-6 flex-col items-center justify-center">
               <span
                 className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-out ${
-                  isMobileMenuOpen ? "rotate-45 translate-y-0.5" : "-translate-y-1.5"
+                  isMobileMenuOpen ? "translate-y-0.5 rotate-45" : "-translate-y-1.5"
                 }`}
               />
               <span
@@ -90,7 +117,7 @@ export function Header() {
               />
               <span
                 className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-out ${
-                  isMobileMenuOpen ? "-rotate-45 -translate-y-0.5" : "translate-y-1.5"
+                  isMobileMenuOpen ? "-translate-y-0.5 -rotate-45" : "translate-y-1.5"
                 }`}
               />
             </div>
@@ -103,24 +130,24 @@ export function Header() {
         <>
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/50 z-40 md:hidden"
+            className="fixed inset-0 z-40 bg-black/60 lg:hidden"
             onClick={closeMobileMenu}
             aria-hidden="true"
           />
 
           {/* Mobile Menu Panel */}
           <div
-            className="fixed top-0 right-0 bottom-0 w-[280px] bg-[#1A1A1A] z-50 md:hidden shadow-2xl animate-slide-in-right"
+            className="animate-slide-in-right fixed bottom-0 right-0 top-0 z-50 w-[300px] max-w-[85vw] bg-ink shadow-2xl lg:hidden"
             role="dialog"
             aria-modal="true"
             aria-label="Mobile navigation menu"
           >
-            <div className="flex flex-col h-full">
+            <div className="flex h-full flex-col">
               {/* Close Button */}
               <div className="flex justify-end p-6">
                 <button
                   onClick={closeMobileMenu}
-                  className="text-white hover:opacity-80 transition-opacity"
+                  className="text-white transition-opacity hover:opacity-80"
                   aria-label="Close menu"
                 >
                   <X className="h-6 w-6" />
@@ -128,27 +155,31 @@ export function Header() {
               </div>
 
               {/* Navigation Links */}
-              <nav className="flex flex-col gap-2 px-6 flex-1">
-                {NAV_ITEMS.map((item) => (
+              <nav className="flex flex-1 flex-col px-6">
+                {NAV_ITEMS.map((item, i) => (
                   <Link
                     key={item.href}
                     href={item.href}
                     onClick={closeMobileMenu}
-                    className="text-white text-lg font-medium py-3 px-4 rounded-lg hover:bg-white/10 transition-colors"
+                    className="flex items-baseline gap-4 border-b border-white/10 py-4 font-display text-3xl font-semibold uppercase text-white transition-colors hover:text-remington-orange"
                   >
+                    <span className="label-mono text-white/40">0{i + 1}</span>
                     {item.label}
                   </Link>
                 ))}
               </nav>
 
               {/* Contact CTA */}
-              <div className="p-6">
+              <div className="space-y-3 p-6">
+                <a href={PHONE.href} className="tabular block text-center text-sm text-white/70">
+                  {PHONE.display}
+                </a>
                 <Link
                   href="#contact"
                   onClick={closeMobileMenu}
-                  className="block w-full text-center rounded-lg bg-remington-orange px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                  className="block w-full bg-remington-orange px-6 py-3.5 text-center text-sm font-semibold text-white transition-colors hover:bg-[#cf4209]"
                 >
-                  Contact Us
+                  Request a bid
                 </Link>
               </div>
             </div>
